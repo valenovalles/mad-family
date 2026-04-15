@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "nombre": "Arkose Carabanchel",
+    "categoria": "ocio",
+    "forma": "flor",
+    "coords": [40.3875318,-3.7352427],
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweqqCsLh9NbNZVfgCTh0GKcM526ppM-_OEF9QtrTwra7csi0srXMgu--2qaGzhMcCqkC6afiUBeD6WuJTV_ry2boyW-i7PEBf9uBXXNvnJB88g7CWv6lgdj6c8wE5YK_uibjW6E-=w426-h240-k-no",
+    "resumen": "Parque de escalada con zona de niños de 3 a 12 años",
+    "caracteristicas": ["suelo blando", "cafetería", "zona gateo"],
+    "favorito": false
+  },
+  {
+    "id": 2,
+    "nombre": "Restaurante Mi Mundo",
+    "categoria": "restaurante",
+    "forma": "rombo",
+    "coords": [40.4530, -3.6883],
+    "imagen": "https://lh3.googleusercontent.com/p/AF1QipPUOd06Sr-meLdT8jJNhMltXZmHbe3o9xeRiNBC=s1360-w1360-h1020-rw",
+    "resumen": "Comida casera con una zona de juegos supervisada increíble.",
+    "caracteristicas": ["parque de bolas", "menú infantil", "tronas"],
+    "favorito": true
+  },
+  {
+    "id": 3,
+    "nombre": "Parque del Retiro (Títeres)",
+    "categoria": "parque",
+    "forma": "circulo",
+    "coords": [40.4153, -3.6839],
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwerhDPXdZErhb24bWispsMvv4hv-lVSuvbZb2bgiUdcap9ViNiQKlhyhWypk3ShupuNN24tve5diLEkbbrHZ_YXBuUZ61dszaKe9wC1bOVVuazfJTWkiv7uZNTSQWZOHOLDk7jVojQ=s1360-w1360-h1020-rw",
+    "resumen": "El pulmón de Madrid con espectáculos de títeres los fines de semana.",
+    "caracteristicas": ["aire libre", "columpios", "sombras", "baño público"],
+    "favorito": false
+  }
+]

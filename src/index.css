@@ -1,0 +1,189 @@
+:root {
+  /* --- Colores de Marca (Principales) --- */
+  --color-main-pink: #F08BB3;
+  --color-second-pink: #D83A7E;
+  --color-main-blue: #6CB1DA;
+  --color-bg-cream: #F3EEEA;
+  --color-white: #FFFFFF;
+  --color-text: #333333;
+
+  /* --- Colores de Categorías (Dopamine Palette) --- */
+  --cat-restaurante: var(--color-second-pink);
+  --cat-parque: #8ED9A2;
+  --cat-ocio: var(--color-main-blue);
+  --cat-cultura: #F4D35E;
+  --cat-talleres: #FF9F43;
+  --color-all: #5a5959;
+  --cat-default: #A0A0A0;
+
+  /* --- Estilos comunes --- */
+  --radius-soft: 12px;
+  --radius-pill: 50px;
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  --mask-nube-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23FFFFFF' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,218.7C960,235,1056,213,1152,186.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* Asegúrate de que estos nombres coincidan con los valores de tu campo "forma" */
+.img-container-cloud {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+}
+
+.img-full {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* El decorador de nube que se superpone */
+.cloud-divider {
+  position: absolute;
+  bottom: -2px; /* Ajuste para que no se vea una línea fina */
+  left: 0;
+  width: 100%;
+  height: 40px; /* Grosor de la nube */
+  background-image: var(--mask-nube-top);
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 2;
+}
+/* Configuración Base */
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg-cream);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Estilo para los Popups de Leaflet (para que hereden el diseño) */
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-soft) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: 200px !important;
+}
+
+/* Animación para los marcadores */
+.custom-marker {
+  transition: transform 0.2s ease-in-out;
+}
+
+.custom-marker:hover {
+  transform: scale(1.2);
+}
+
+/* Estilo específico para el buscador blanco sobre rosa */
+.search-container {
+  background-color: var(--color-main-pink);
+  padding: 15px 20px 10px 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: var(--color-white);
+  color: var(--color-text);
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* El selector de Lista/Mapa que tienes en el wireframe */
+/* El selector de Lista/Mapa con jerarquía de azules */
+.view-toggle-container {
+  background-color: var(--color-main-pink);
+  display: flex;
+  justify-content: center;
+  padding: 0 20px 15px 20px;
+  gap: 12px;
+}
+
+.btn-toggle {
+  flex: 1;
+  max-width: 140px;
+  padding: 10px;
+  border-radius: var(--radius-soft);
+  border: none;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  /* Por defecto, usamos el azul de marca */
+  background-color: var(--color-main-blue);
+  color: white;
+}
+
+/* El botón seleccionado: Azul Sólido y Fuerte */
+.btn-toggle.active {
+  opacity: 1;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02); /* Un toque sutil de tamaño */
+}
+
+/* El botón no seleccionado: Azul más suave (lavado) */
+.btn-toggle.inactive {
+  opacity: 0.5; /* Aquí está la clave del wireframe */
+  box-shadow: none;
+  transform: scale(1);
+}
+
+/* Efecto hover para que se note que se puede clicar */
+.btn-toggle.inactive:hover {
+  opacity: 0.99;
+}
+
+/* Por defecto (Móvil), escondemos las acciones del header superior */
+@media (max-width: 768px) {
+  .header-user-actions {
+    display: none !important;
+  }
+}
+
+/* En Web, podríamos esconder la barra inferior si la creamos */
+@media (min-width: 769px) {
+  .mobile-navbar {
+    display: none !important;
+  }
+}
+
+.app-content-wrapper {
+  padding-bottom: 70px; /* Misma altura que la navbar + margen */
+}
+
+/* Contenedor base de las categorías en la Home */
+/* Contenedor de las categorías */
+.home-category-grid {
+  display: grid;
+  gap: 30px; /* Más espacio entre formas grandes */
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* MÓVIL: Una debajo de otra, pero bien grandes (estilo "Hero") */
+@media (max-width: 600px) {
+  .home-category-grid {
+    grid-template-columns: 1fr;
+    max-width: 280px; /* Crecen en móvil para ser protagonistas */
+  }
+}
+
+/* WEB: 4 en línea, mucho más grandes */
+@media (min-width: 601px) {
+  .home-category-grid {
+    grid-template-columns: repeat(4, 1fr);
+    /* Forzamos que cada columna tenga un tamaño mínimo generoso */
+    grid-auto-columns: minmax(180px, 1fr); 
+  }
+}
