@@ -4,8 +4,6 @@ import 'leaflet/dist/leaflet.css';
 import '../index.css'
 import PlaceCard from './PlaceCard';
 
-
-
 // Función para obtener el color de las variables del index.css
 const getCategoryColor = (categoria) => {
   // Intentamos sacar el color del CSS, si falla usamos el default
@@ -41,37 +39,35 @@ const createCustomIcon = (categoria) => {
   return L.divIcon({
     className: "custom-marker",
     html: `
-      <svg width="30" height="30" viewBox="0 0 24 24" style="filter: drop-shadow(var(--shadow-soft));">
+      <svg width="40" height="40" viewBox="0 0 24 24" style="filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));">
         ${svgIcon}
       </svg>
     `,
-    iconSize: [30, 30],
-    iconAnchor: [15, 15],
-    popupAnchor: [0, -15]
+    iconSize: [40, 40], // Más grandes
+    iconAnchor: [20, 20], // Centrados
+    popupAnchor: [0, -20]
   });
 };
 
-export default function MapaMadrid({places}) {
+// COMPONENTE: Añadidas las props favoritos y toggleFavorito
+export default function MapaMadrid({ places, favoritos = [], toggleFavorito }) {
   return (
     <div style={{ 
-      /* CALCULO MÁGICO: 
-         100vh es el alto total. 
-         Restamos lo que miden aprox tu Header y tu Footer.
-         Si tu Header mide unos 160px y el Footer unos 70px: 
-      */
       height: 'calc(100vh - 230px)', 
       width: '100%', 
-      // En la vista de mapa completo, quizás quieras quitar el borderRadius 
-      // para que pegue con los bordes de la pantalla (estilo App real)
       borderRadius: '0px', 
       overflow: 'hidden', 
       position: 'relative'
     }}>
       <MapContainer 
-        center={[40.4167, -3.7037]} 
-        zoom={13} 
+        /* AJUSTES CLAVE:
+           1. Center: Bajamos un poco la latitud (de 40.41 a 40.40) 
+              para centrar mejor la zona entre Centro y Carabanchel.
+           2. Zoom: Bajamos a 12 para que se vea un área más amplia.
+        */
+        center={[40.3950, -3.7100]} 
+        zoom={12} 
         style={{ height: '100%', width: '100%' }}
-        // Desactivamos el zoom con scroll para que no moleste al navegar en móvil
         scrollWheelZoom={true}
       >
         <TileLayer
@@ -86,13 +82,17 @@ export default function MapaMadrid({places}) {
             icon={createCustomIcon(sitio.categoria)}
           >
             <Popup minWidth={250}>
-              <PlaceCard sitio={sitio} />
+              {/* PASAMOS LAS PROPS: Asegurando el matching numérico para pintar el corazón */}
+              <PlaceCard 
+                sitio={sitio} 
+                isFav={favoritos.map(Number).includes(Number(sitio.id))} 
+                onToggleFav={() => toggleFavorito(sitio.id)} 
+              />
             </Popup>
           </Marker>
         ))}
       </MapContainer>
 
-      {/* Estilo extra para los popups de Leaflet para que peguen con tu Dopamine Decor */}
       <style dangerouslySetInnerHTML={{ __html: `
         .leaflet-popup-content-wrapper {
           border-radius: 20px;

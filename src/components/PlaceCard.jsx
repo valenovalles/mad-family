@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
-  const esVarianteA = sitio.id % 2 === 0;
+  const [copiado, setCopiado] = useState(false); // Controls toast animation
+  const navigate = useNavigate();
 
+  const esVarianteA = sitio.id % 2 === 0;
   const colorBoton = esVarianteA ? 'var(--color-main-pink)' : 'var(--color-main-blue)';
   const colorTagsText = esVarianteA ? 'var(--color-main-blue)' : 'var(--color-main-pink)';
   const colorTagsBorder = esVarianteA ? 'var(--color-main-blue)' : 'var(--color-main-pink)';
 
   const handleShare = (e) => {
     e.stopPropagation();
+    
+    // Construimos la URL real de la ficha del lugar para compartir el sitio específico
+    const urlFicha = `${window.location.origin}/lugar/${sitio.id}`;
+
     if (navigator.share) {
       navigator.share({
         title: `madFamily: ${sitio.nombre}`,
         text: `¡Mira este planazo en Madrid para ir con niños! 🎡`,
-        url: window.location.href,
+        url: urlFicha,
       });
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert("¡Enlace copiado! Pégalo en WhatsApp 🚀");
+      navigator.clipboard.writeText(urlFicha);
+      
+      // Lanzamos la animación del Toast personalizado
+      setCopiado(true);
+      setTimeout(() => setCopiado(false), 2500);
     }
   };
 
@@ -25,13 +35,26 @@ const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
     <div className="place-card" style={{ 
       width: '100%', 
       position: 'relative',
-      // --- ESTILOS DE TARJETA BLANCA ---
       backgroundColor: 'white', 
       borderRadius: '20px', 
       overflow: 'hidden', 
       boxShadow: 'var(--shadow-soft)',
       marginBottom: '10px'
     }}>
+      
+      {/* --- AVISO FLOTANTE DE COPIADO (TOAST) --- */}
+      {copiado && (
+        <div style={{
+          position: 'absolute', top: '15px', left: '15px', right: '15px',
+          backgroundColor: 'var(--color-text)', color: 'white',
+          padding: '8px 12px', borderRadius: '12px', fontSize: '0.75rem',
+          fontWeight: '800', textAlign: 'center', zIndex: '20',
+          boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
+          animation: 'fadeInOut 2.5s ease-in-out'
+        }}>
+          ¡Enlace copiado! Pégalo en WhatsApp 🚀
+        </div>
+      )}
       
       {/* --- BOTÓN FAVORITO (FLOTANTE) --- */}
       <button 
@@ -40,20 +63,11 @@ const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
           onToggleFav();
         }}
         style={{
-          position: 'absolute',
-          top: '12px',
-          right: '12px',
-          zIndex: 10,
-          backgroundColor: 'rgba(255, 255, 255, 0.9)', // Un pelín traslúcido queda genial
-          border: 'none',
-          width: '36px',
-          height: '36px',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
+          position: 'absolute', top: '12px', right: '12px', zIndex: 10,
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          border: 'none', width: '36px', height: '36px', borderRadius: '50%',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
           transition: 'transform 0.2s'
         }}
         onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.8)'}
@@ -97,52 +111,75 @@ const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
           ))}
         </div>
 
-        {/* ACCIONES */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {/* --- NUEVAS ACCIONES EN PARALELO (ROW LAYOUT) --- */}
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          
+          {/* Botón Compartir (Estilizado como acción secundaria) */}
           <button 
             onClick={handleShare}
             style={{
-              width: '100%',
-              backgroundColor: 'transparent',
-              color: colorBoton,
+              backgroundColor: '#F4F4F6',
+              color: 'var(--color-text)',
               border: 'none',
-              padding: '8px 0 8px 12px',
+              height: '40px',
+              width: '44px', // Cuadrado perfecto con bordes suaves
+              borderRadius: 'var(--radius-soft)',
               cursor: 'pointer',
               display: 'flex',
-              justifyContent: 'flex-start',
+              justifyContent: 'center',
               alignItems: 'center',
-              gap: '6px',
-              fontSize: '0.75rem',
-              fontWeight: '800',
-              transition: 'opacity 0.2s',
+              transition: 'background-color 0.2s, transform 0.1s',
               margin: '0'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
-            onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#EAEAEF'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#F4F4F6'}
+            onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+            onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            title="Compartir con otra family"
           >
-            <span className="material-symbols-rounded" style={{ fontSize: '1.1rem' }}>send</span>
-            Enviar a otra family
+            <span className="material-symbols-rounded" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+              share
+            </span>
           </button>
 
+          {/* Botón Principal: Ver ficha (Ocupa el resto del espacio disponible) */}
           <button style={{
-            width: '100%',
+            flex: 1,
+            height: '40px',
             backgroundColor: colorBoton,
             color: 'var(--color-white)',
             border: 'none',
-            padding: '10px',
             borderRadius: 'var(--radius-soft)',
             fontWeight: '900',
+            fontSize: '0.85rem',
             cursor: 'pointer',
             boxShadow: '0 4px 0 rgba(0,0,0,0.05)', 
-            transition: 'transform 0.1s'
+            transition: 'transform 0.1s, opacity 0.2s',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
-          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+          onClick={() => navigate(`/lugar/${sitio.id}`)}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.98)'}
           onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
             Ver ficha completa
           </button>
+
         </div>
       </div>
+
+      {/* Estilos CSS inyectados para animar la notificación flotante */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translateY(-10px); }
+          10% { opacity: 1; transform: translateY(0); }
+          90% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-10px); }
+        }
+      `}} />
     </div>
   );
 };
