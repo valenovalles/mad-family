@@ -62,7 +62,7 @@
   {
     "id": 6,
     "nombre": "La Tribu Kids (Chamberí)",
-    "categoria": "restaurante",
+    "categoria": "cafetería",
     "forma": "estrella",
     "coords": [40.4404184, -3.6995518],
     "direccion": "C. de Espronceda, 22, Chamberí, 28003 Madrid",
@@ -158,7 +158,7 @@
   {
     "id": 14,
     "nombre": "Little & Latte",
-    "categoria": "restaurante",
+    "categoria": "cafetería",
     "forma": "estrella",
     "coords": [40.4497148, -3.6785267],
     "direccion": "Calle del Príncipe de Vergara, 205, Chamartín, 28002 Madrid",

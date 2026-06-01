@@ -97,6 +97,7 @@ function App() {
   };
 
   // --- LÓGICA DE FILTRADO Y URL ---
+  // --- LÓGICA DE FILTRADO Y URL ---
   const params = new URLSearchParams(location.search);
   const filtroCat = params.get('categoria') || 'todos';
 
@@ -105,9 +106,28 @@ function App() {
     navigate(`${path}?categoria=${nuevaCat}`);
   };
 
+  // 🔥 NUEVO BUSCADOR MULTICAMPO INTELIGENTE (Ignora acentos y busca en Nombre, Categoría y Descripción)
   const sitiosFiltrados = places.filter(sitio => {
-    const coincideTexto = sitio.nombre.toLowerCase().includes(busqueda.toLowerCase());
+    // 1. Normalizamos lo que escribe el usuario (minúsculas y sin acentos)
+    const terminoBusqueda = busqueda
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+
+    // 2. Normalizamos los campos del JSON para poder comparar limpiamente
+    const nombrePlan = (sitio.nombre || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const categoriaPlan = (sitio.categoria || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const descripcionPlan = (sitio.descripcion || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    // 3. Comprobamos si el término está en alguno de los tres sitios
+    const coincideTexto = 
+      nombrePlan.includes(terminoBusqueda) ||
+      categoriaPlan.includes(terminoBusqueda) ||
+      descripcionPlan.includes(terminoBusqueda);
+
+    // Mantenemos tu lógica de botones de categoría intacta
     const coincideCat = filtroCat === 'todos' || sitio.categoria === filtroCat;
+    
     return coincideTexto && coincideCat;
   });
 
@@ -124,14 +144,49 @@ function App() {
   return (
     <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--color-bg-cream)' }}>
       
-      {/* CINTA FAMILIAR RESPONSIVE (Solo si está logueado, si no, no se muestra) */}
+      {/* CINTA FAMILIAR RESPONSIVE (Una sola en todo el código, con color inteligente) */}
       {session && (
-        <div className="family-badge-bar" style={{ 
-          padding: '6px 20px', fontSize: '0.75rem', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',
-          color: 'white', letterSpacing: '0.5px', fontWeight: '700', zIndex: 100
-        }}>
-          <span>Family: <strong style={{ fontWeight: '900' }}>{session.user.email}</strong></span>
-        </div>
+        <>
+          <div className="family-badge-bar" style={{ 
+            padding: '6px 20px', 
+            fontSize: '0.75rem', 
+            display: 'flex', 
+            justifyContent: 'flex-start', 
+            alignItems: 'center',
+            color: 'white', 
+            letterSpacing: '0.5px', 
+            fontWeight: '700', 
+            zIndex: 100
+          }}>
+            <span>Family: <strong style={{ fontWeight: '900' }}>{session.user.email}</strong></span>
+          </div>
+
+          {/* Estilos dinámicos inyectados */}
+          <style dangerouslySetInnerHTML={{ __html: `
+            /* 📱 Por defecto en móviles: fusión total con el bloque rosa */
+            .family-badge-bar {
+              background-color: var(--color-main-pink);
+              box-shadow: none !important; /* Quitamos cualquier sombra de la cinta */
+            }
+
+            /* Quitamos la sombra superior del header que causaba el efecto de separación */
+            .family-badge-bar + header {
+              box-shadow: none !important; 
+            }
+
+            /* 🖥️ En escritorios (pantallas grandes): vuelve el azul y la estructura normal */
+            @media (min-width: 768px) {
+              .family-badge-bar {
+                background-color: var(--color-main-blue) !important;
+              }
+              
+              /* Devolvemos la sombra suave al header completo para que flote sobre el contenido en PC */
+              .family-badge-bar + header {
+                box-shadow: var(--shadow-soft) !important;
+              }
+            }
+          `}} />
+        </>
       )}
 
       <Header setBusqueda={setBusqueda} setFiltroCat={actualizarFiltro} filtroCat={filtroCat} />

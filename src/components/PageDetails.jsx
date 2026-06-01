@@ -36,7 +36,9 @@ const PageDetails = ({ places, session, setMostrarAuthModal }) => {
 
   if (!sitio) return <div style={{ padding: '20px', textAlign: 'center' }}>¡Lugar no encontrado! 😅</div>;
 
-  const urlGoogleMaps = `https://www.google.com/maps/search/?api=1&query=${sitio.coords[0]},${sitio.coords[1]}`;
+  // Codificamos el nombre y las coordenadas para que la URL sea completamente válida
+  const consultaMaps = encodeURIComponent(`${sitio.nombre}, ${sitio.coords[0]},${sitio.coords[1]}`);
+  const urlGoogleMaps = `https://www.google.com/maps/search/?api=1&query=${consultaMaps}`;
 
   const handleShare = () => {
     const urlFicha = window.location.href;
