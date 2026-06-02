@@ -5,17 +5,21 @@ import ViewToggle from './ViewToogle';
 import CategoryFilters from './CategoryFilter';
 import logoMF from '../assets/logo_def.png'; 
 
+// 👤 Recibimos la prop session o el email si lo estás pasando desde App.jsx
 const Header = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 📱 ESTADO NUEVO: Controla si se despliega el filtro en móvil (cerrado por defecto)
+  // 📱 Estado para desplegar filtros en móvil
   const [mostrarCategorias, setMostrarCategorias] = useState(false);
   const esPerfil = location.pathname === '/perfil';
   const esFavoritos = location.pathname === '/favoritos';
   const vistaActual = location.pathname.replace('/', '');
 
-  // Estilo para los iconos de acción
+  // Extraemos el email si viene en las props o si modificamos la llamada en App.jsx
+  const userEmail = props.session?.user?.email || props.email;
+
+  // Estilo para los iconos de acción de escritorio
   const actionIconStyle = {
     color: 'white',
     cursor: 'pointer',
@@ -39,7 +43,8 @@ const Header = (props) => {
         display: 'flex',
         alignItems: 'center',
         padding: '12px 15px',
-        gap: '12px'
+        gap: '12px',
+        justifyContent: 'space-between' // 🔥 Empuja logo a la izquierda y contenido a la derecha
       }}>
         {/* LOGO */}
         <img 
@@ -49,17 +54,16 @@ const Header = (props) => {
           style={{ height: '42px', cursor: 'pointer' }} 
         />
 
-        {/* CONTENIDO DINÁMICO CENTRAL / DERECHO */}
-        <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '15px' }}>
+        {/* CONTENIDO DINÁMICO DERECHO */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
           
           {/* CASO 1: MAPA o LISTA (Buscador central + Botón Colapsable de Filtros) */}
           {(location.pathname === '/lista' || location.pathname === '/mapa') ? (
-            <div style={{ width: '100%', display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <div style={{ maxWidth: '180px' }}>
                 <SearchBar setBusqueda={props.setBusqueda} />
               </div>
               
-              {/* 🎛️ NUEVO BOTÓN: Activa/Desactiva las categorías. Solo se verá en móviles */}
               <button
                 className="toggle-categorias-btn"
                 onClick={() => setMostrarCategorias(!mostrarCategorias)}
@@ -84,25 +88,36 @@ const Header = (props) => {
               </button>
             </div>
           ) : (
-            /* CASO 2: HOME, PERFIL, FAVORITOS o PAGEDETAILS (Sin buscador, limpia el UI/UX de filtros) */
+            /* CASO 2: HOME, PERFIL, FAVORITOS o PAGEDETAILS */
             <>
-              {/* Si es Perfil/Favs, mostramos el texto */}
+              {/* Títulos limpios de sección */}
               {(esPerfil || esFavoritos) && (
-                <h2 style={{ color: 'white', margin: '0 auto 0 0', fontSize: '1.1rem', fontWeight: '900' }}>
+                <h2 style={{ color: 'white', margin: 0, fontSize: '1.1rem', fontWeight: '900' }}>
                   {esPerfil ? 'Mi Perfil' : 'Mis Favoritos'}
                 </h2>
               )}
 
-              {/* Si estamos en la ficha detallada de un plan, mostramos un título limpio */}
               {location.pathname.startsWith('/lugar/') && (
-                <h2 style={{ color: 'white', margin: '0 auto 0 0', fontSize: '1.1rem', fontWeight: '900' }}>
+                <h2 style={{ color: 'white', margin: 0, fontSize: '1.1rem', fontWeight: '900' }}>
                   Ver Plan
                 </h2>
               )}
 
-              {/* Iconos de acceso rápido (Visibles en Home, Perfil, Favs y Detalles) */}
+              {/* ✉️ TEXTO EXCLUSIVO MÓVIL: "Family: email" (Se controla con CSS abajo) */}
+              {userEmail && (
+                <span className="mobile-family-text" style={{
+                  color: 'white',
+                  fontSize: '0.8rem',
+                  fontWeight: '700',
+                  opacity: 0.95
+                }}>
+                  Family: <strong style={{ fontWeight: '900' }}>{userEmail.split('@')[0]}</strong>
+                </span>
+              )}
+
+              {/* 🖥️ ICONOS EXCLUSIVOS DE ESCRITORIO (Se ocultan en móvil mediante CSS) */}
               <span 
-                className="material-symbols-rounded" 
+                className="material-symbols-rounded desktop-only-icon" 
                 onClick={() => navigate('/favoritos')}
                 style={{ 
                   ...actionIconStyle,
@@ -113,6 +128,7 @@ const Header = (props) => {
               </span>
 
               <div 
+                className="desktop-only-icon"
                 onClick={() => navigate('/perfil')}
                 style={{ 
                   width: '32px', height: '32px', borderRadius: '50%', 
@@ -128,13 +144,10 @@ const Header = (props) => {
         </div>
       </div>
 
-      {/* 🎯 SECCIÓN INFERIOR OPTIMIZADA: Solo aparece estrictamente en Mapa o Lista */}
+      {/* SECCIÓN INFERIOR OPTIMIZADA: Solo en Mapa o Lista */}
       {(location.pathname === '/lista' || location.pathname === '/mapa') && (
         <div style={{ paddingBottom: '10px' }}>
-          {/* Mantenemos el ViewToggle siempre a la vista */}
           <ViewToggle vista={vistaActual} setVista={props.setVista} />
-          
-          {/* Envolvemos CategoryFilters en un contenedor animado mediante CSS */}
           <div className={`colapsable-categorias-container ${mostrarCategorias ? 'abierto' : ''}`}>
             <CategoryFilters 
               filtroCat={props.filtroCat} 
@@ -144,9 +157,16 @@ const Header = (props) => {
         </div>
       )}
 
-      {/* 🎨 REGLAS CSS RESPONSIVE PARA DOS FILAS EN MÓVIL */}
+      {/* 🎨 REGLAS RESPONSIVE DE VISIBILIDAD */}
       <style dangerouslySetInnerHTML={{ __html: `
-        /* COMPORTAMIENTO EN MÓVIL (Por defecto cerrado) */
+        /* 📱 COMPORTAMIENTO EN MÓVIL (Por defecto) */
+        .desktop-only-icon {
+          display: none !important;
+        }
+        .mobile-family-text {
+          display: inline-block !important;
+        }
+
         .colapsable-categorias-container {
           max-height: 0px;
           opacity: 0;
@@ -156,17 +176,23 @@ const Header = (props) => {
           margin-top: 0px;
         }
 
-        /* CUANDO SE ABRE EN EL MÓVIL */
         .colapsable-categorias-container.abierto {
-          max-height: 110px; /* 🔥 CLAVE: Ampliamos a 110px para que entren las dos filas completas sin cortes */
+          max-height: 110px;
           opacity: 1;
           pointer-events: auto;
           margin-top: 8px;
-          overflow: visible !important; /* Permitimos que se vean las dos líneas limpiamente */
+          overflow: visible !important;
         }
 
-        /* COMPORTAMIENTO EN ORDENADOR / TABLET */
+        /* 🖥️ COMPORTAMIENTO EN ESCRITORIO (A partir de 768px) */
         @media (min-width: 768px) {
+          .desktop-only-icon {
+            display: flex !important;
+          }
+          .mobile-family-text {
+            display: none !important;
+          }
+
           .toggle-categorias-btn {
             display: none !important;
           }
