@@ -11,8 +11,6 @@ const Header = (props) => {
 
   // 📱 ESTADO NUEVO: Controla si se despliega el filtro en móvil (cerrado por defecto)
   const [mostrarCategorias, setMostrarCategorias] = useState(false);
-
-  const esHome = location.pathname === '/home';
   const esPerfil = location.pathname === '/perfil';
   const esFavoritos = location.pathname === '/favoritos';
   const vistaActual = location.pathname.replace('/', '');
@@ -55,7 +53,7 @@ const Header = (props) => {
         <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '15px' }}>
           
           {/* CASO 1: MAPA o LISTA (Buscador central + Botón Colapsable de Filtros) */}
-          {!esHome && !esPerfil && !esFavoritos ? (
+          {(location.pathname === '/lista' || location.pathname === '/mapa') ? (
             <div style={{ width: '100%', display: 'flex', gap: '10px', alignItems: 'center' }}>
               <div style={{ flex: 1 }}>
                 <SearchBar setBusqueda={props.setBusqueda} />
@@ -86,7 +84,7 @@ const Header = (props) => {
               </button>
             </div>
           ) : (
-            /* CASO 2: HOME, PERFIL o FAVORITOS (Sin buscador, solo iconos o título) */
+            /* CASO 2: HOME, PERFIL, FAVORITOS o PAGEDETAILS (Sin buscador, limpia el UI/UX de filtros) */
             <>
               {/* Si es Perfil/Favs, mostramos el texto */}
               {(esPerfil || esFavoritos) && (
@@ -95,7 +93,14 @@ const Header = (props) => {
                 </h2>
               )}
 
-              {/* Iconos de acceso rápido (Visibles en Home, Perfil y Favs) */}
+              {/* Si estamos en la ficha detallada de un plan, mostramos un título limpio */}
+              {location.pathname.startsWith('/lugar/') && (
+                <h2 style={{ color: 'white', margin: '0 auto 0 0', fontSize: '1.1rem', fontWeight: '900' }}>
+                  Ver Plan
+                </h2>
+              )}
+
+              {/* Iconos de acceso rápido (Visibles en Home, Perfil, Favs y Detalles) */}
               <span 
                 className="material-symbols-rounded" 
                 onClick={() => navigate('/favoritos')}

@@ -82,10 +82,32 @@ const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
         </span>
       </button>
 
-      {/* IMAGEN Y NUBE */}
-      <div className="img-container-cloud">
-        <img src={sitio.imagen} alt={sitio.nombre} className="img-full" />
-        <div className="cloud-divider"></div>
+      {/* ☁️ IMAGEN RECOORTADA CON EFECTO NUBE SIMÉTRICO ☁️ */}
+      <div className="img-container-cloud" style={{ position: 'relative', height: '160px', width: '100%', overflow: 'hidden' }}>
+        <img 
+          src={sitio.imagen} 
+          alt={sitio.nombre} 
+          className="img-full" 
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        
+        {/* 🎨 ONDA FESTONEADA EN SVG: Replica el estilo dulce y parejo de las nubes */}
+        <svg 
+          viewBox="0 0 100 12" 
+          preserveAspectRatio="none" 
+          style={{
+            position: 'absolute',
+            bottom: '-1px', // Evita cualquier micro-línea extraña de renderizado
+            left: 0,
+            width: '100%',
+            height: '22px', // Altura del festón
+            fill: 'white', // Corta la imagen simulando el fondo de la tarjeta
+            zIndex: 5,
+            pointerEvents: 'none'
+          }}
+        >
+          <path d="M0,12 L100,12 L100,6 C95,6 92,0 87.5,0 C83,0 80,6 75,6 C70,6 67,0 62.5,0 C58,0 55,6 50,6 C45,6 42,0 37.5,0 C33,0 30,6 25,6 C20,6 17,0 12.5,0 C8,0 5,6 0,6 Z" />
+        </svg>
       </div>
 
       <div style={{ padding: '12px' }}>
@@ -111,10 +133,10 @@ const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
           ))}
         </div>
 
-        {/* --- NUEVAS ACCIONES EN PARALELO (ROW LAYOUT) --- */}
+        {/* --- ACCIONES EN PARALELO (ROW LAYOUT) --- */}
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           
-          {/* Botón Compartir (Estilizado como acción secundaria) */}
+          {/* Botón Compartir */}
           <button 
             onClick={handleShare}
             style={{
@@ -122,7 +144,7 @@ const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
               color: 'var(--color-text)',
               border: 'none',
               height: '40px',
-              width: '44px', // Cuadrado perfecto con bordes suaves
+              width: '44px',
               borderRadius: 'var(--radius-soft)',
               cursor: 'pointer',
               display: 'flex',
@@ -142,7 +164,7 @@ const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
             </span>
           </button>
 
-          {/* Botón Principal: Ver ficha (Ocupa el resto del espacio disponible) */}
+          {/* Botón Principal: Ver ficha */}
           <button style={{
             flex: 1,
             height: '40px',
@@ -171,7 +193,7 @@ const PlaceCard = ({ sitio, isFav, onToggleFav }) => {
         </div>
       </div>
 
-      {/* Estilos CSS inyectados para animar la notificación flotante */}
+      {/* Estilos CSS inyectados */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes fadeInOut {
           0% { opacity: 0; transform: translateY(-10px); }

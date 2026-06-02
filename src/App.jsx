@@ -97,7 +97,6 @@ function App() {
   };
 
   // --- LÓGICA DE FILTRADO Y URL ---
-  // --- LÓGICA DE FILTRADO Y URL ---
   const params = new URLSearchParams(location.search);
   const filtroCat = params.get('categoria') || 'todos';
 
@@ -106,7 +105,7 @@ function App() {
     navigate(`${path}?categoria=${nuevaCat}`);
   };
 
-  // 🔥 NUEVO BUSCADOR MULTICAMPO INTELIGENTE (Ignora acentos y busca en Nombre, Categoría y Descripción)
+  // 🔥 BUSCADOR MULTICAMPO INTELIGENTE ACTUALIZADO (Rastrea también arrays de características)
   const sitiosFiltrados = places.filter(sitio => {
     // 1. Normalizamos lo que escribe el usuario (minúsculas y sin acentos)
     const terminoBusqueda = busqueda
@@ -114,16 +113,23 @@ function App() {
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
 
-    // 2. Normalizamos los campos del JSON para poder comparar limpiamente
+    // 2. Normalizamos los campos de texto plano del JSON
     const nombrePlan = (sitio.nombre || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const categoriaPlan = (sitio.categoria || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const descripcionPlan = (sitio.descripcion || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-    // 3. Comprobamos si el término está en alguno de los tres sitios
+    // 3. 🚀 NUEVO: Mapeamos y normalizamos el array de características del plan
+    const coincideCaracteristica = sitio.caracteristicas && sitio.caracteristicas.some(tag => {
+      const tagNormalizado = tag.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return tagNormalizado.includes(terminoBusqueda);
+    });
+
+    // 4. Comprobamos si el término está en alguno de los campos de texto o en los tags
     const coincideTexto = 
       nombrePlan.includes(terminoBusqueda) ||
       categoriaPlan.includes(terminoBusqueda) ||
-      descripcionPlan.includes(terminoBusqueda);
+      descripcionPlan.includes(terminoBusqueda) ||
+      coincideCaracteristica; // 👈 Agregado al flujo global
 
     // Mantenemos tu lógica de botones de categoría intacta
     const coincideCat = filtroCat === 'todos' || sitio.categoria === filtroCat;
@@ -144,7 +150,7 @@ function App() {
   return (
     <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--color-bg-cream)' }}>
       
-      {/* CINTA FAMILIAR RESPONSIVE (Una sola en todo el código, con color inteligente) */}
+      {/* CINTA FAMILIAR RESPONSIVE */}
       {session && (
         <>
           <div className="family-badge-bar" style={{ 
@@ -163,24 +169,20 @@ function App() {
 
           {/* Estilos dinámicos inyectados */}
           <style dangerouslySetInnerHTML={{ __html: `
-            /* 📱 Por defecto en móviles: fusión total con el bloque rosa */
             .family-badge-bar {
               background-color: var(--color-main-pink);
-              box-shadow: none !important; /* Quitamos cualquier sombra de la cinta */
+              box-shadow: none !important;
             }
 
-            /* Quitamos la sombra superior del header que causaba el efecto de separación */
             .family-badge-bar + header {
               box-shadow: none !important; 
             }
 
-            /* 🖥️ En escritorios (pantallas grandes): vuelve el azul y la estructura normal */
             @media (min-width: 768px) {
               .family-badge-bar {
                 background-color: var(--color-main-blue) !important;
               }
               
-              /* Devolvemos la sombra suave al header completo para que flote sobre el contenido en PC */
               .family-badge-bar + header {
                 box-shadow: var(--shadow-soft) !important;
               }
@@ -195,7 +197,17 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home setFiltroCat={actualizarFiltro} places={places} />} />
-          <Route path="/mapa" element={<MapaMadrid places={sitiosFiltrados} favoritos={favoritos} toggleFavorito={toggleFavorito} />} />
+          <Route 
+            path="/mapa" 
+            element={
+              <MapaMadrid 
+                key={location.search} 
+                places={new URLSearchParams(location.search).get('seleccionar') ? places : sitiosFiltrados} 
+                favoritos={favoritos} 
+                toggleFavorito={toggleFavorito} 
+              />
+            } 
+          />
           <Route 
             path="/lugar/:id" 
             element={
@@ -203,6 +215,8 @@ function App() {
                 places={places} 
                 session={session} 
                 setMostrarAuthModal={setMostrarAuthModal} 
+                favoritos={favoritos}    
+                toggleFavorito={toggleFavorito}
               />
             } 
           />
@@ -215,7 +229,7 @@ function App() {
             </div>
           } />
 
-          {/* RUTAS PROTEGIDAS VISUALMENTE (Si no hay sesión, les salta el modal en lugar de la pantalla vacía) */}
+          {/* RUTAS PROTEGIDAS VISUALMENTE */}
           <Route path="/favoritos" element={
             session 
               ? <Favoritos favoritos={favoritos} places={places} toggleFavorito={toggleFavorito} />
@@ -238,7 +252,7 @@ function App() {
 
       <FooterNav />
 
-      {/* --- 💥 PANTALLA/MODAL FLOTANTE DE REGISTRO BLINDADO (PC & MÓVIL) --- */}
+      {/* --- MODAL FLOTANTE DE REGISTRO BLINDADO --- */}
       {mostrarAuthModal && (
         <div style={{
           position: 'fixed', 
@@ -247,9 +261,9 @@ function App() {
           zIndex: 2000, 
           display: 'flex', 
           flexDirection: 'column',
-          justifyContent: 'flex-start', // Empieza arriba para evitar desbordamientos
+          justifyContent: 'flex-start', 
           alignItems: 'center', 
-          overflowY: 'auto', // Permite scroll si el contenido es más alto que la pantalla
+          overflowY: 'auto', 
           WebkitOverflowScrolling: 'touch',
           padding: '20px'
         }}>
@@ -266,12 +280,12 @@ function App() {
             <span className="material-symbols-rounded" style={{ fontSize: '2rem' }}>close</span>
           </button>
 
-          {/* CONTENEDOR ENVOLTORIO: Asegura el scroll y los márgenes en PC */}
+          {/* CONTENEDOR ENVOLTORIO */}
           <div style={{ 
             maxWidth: '420px', 
             width: '100%', 
             textAlign: 'center',
-            marginTop: '6vh', // Empuja el contenido hacia abajo un 6% de la pantalla
+            marginTop: '6vh', 
             marginBottom: '40px',
             display: 'flex',
             flexDirection: 'column',
@@ -287,7 +301,7 @@ function App() {
               Crea tu cuenta familiar en unos segundos para poder guardar tus planes favoritos, sincronizarlos y opinar con la comunidad.
             </p>
             
-            {/* Tarjeta blanca contenedora: Forzamos aislamiento CSS */}
+            {/* Tarjeta blanca contenedora */}
             <div style={{ 
               backgroundColor: 'white', 
               padding: '25px', 
@@ -295,8 +309,8 @@ function App() {
               boxShadow: 'var(--shadow-soft)',
               width: '100%',
               boxSizing: 'border-box',
-              position: 'relative', // Resetea posicionamientos absolutos internos de Auth
-              overflow: 'hidden' // Corta cualquier desborde rebelde de Auth
+              position: 'relative', 
+              overflow: 'hidden' 
             }}>
               <Auth />
             </div>

@@ -7,7 +7,7 @@
     "coords": [40.3875359, -3.7378176],
     "direccion": "C. Julia Nebot, 4, Carabanchel, 28025 Madrid",
     "imagen": "/img/arkose_1.jpeg",
-    "resumen": "Rocódromo con zona infantil y restaurante saludable.",
+    "resumen": "Rocódromo con zona infantil, restaurante y cafetería. Un espacio ideal para que los peques se inicien en la escalada de forma divertida y segura mientras tú disfrutas de un café.",
     "caracteristicas": ["escalada", "cafetería", "zona gateo"],
     "favorito": false
   },
@@ -19,7 +19,7 @@
     "coords": [40.408968, -3.7129703],
     "direccion": "C. de Toledo, 82, Centro, 28005 Madrid",
     "imagen": "/img/billy_1.jpeg",
-    "resumen": "Brunch famoso con zona de juegos muy acogedora en Calle Toledo.",
+    "resumen": "Brunch famoso con zona de juegos muy acogedora en Calle Toledo. Ofrece una carta deliciosa durante todo el día en un ambiente donde los niños son tan bienvenidos como los tortitas.",
     "caracteristicas": ["brunch", "play area", "tronas"],
     "favorito": true
   },
@@ -31,7 +31,7 @@
     "coords": [40.3978264, -3.7226544],
     "direccion": "C. Cortada, 1, Carabanchel, 28019 Madrid",
     "imagen": "/img/bibliotecaMarquesdeVadillo.JPG",
-    "resumen": "Vistas increíbles al río y una sección infantil enorme y luminosa.",
+    "resumen": "Sección infantil bastante grande y luminosa. Su espacio para niños está diseñado para disfrutar de la lectura en familia con total comodidad y luz natural.",
     "caracteristicas": ["lectura infantil", "aseo infantil"],
     "favorito": false
   },
@@ -43,7 +43,7 @@
     "coords": [40.3818567, -3.713181],
     "direccion": "Av. de Rafaela Ybarra, 43, Usera, 28026 Madrid",
     "imagen": "/img/puertaDelHierro.JPG",
-    "resumen": "Un referente cultural en Usera con muchas actividades para niños.",
+    "resumen": "Un referente cultural en Usera con muchas actividades para niños. Destaca por abrir fines de semana y festivos, por su agenda de cuentacuentos y una sala infantil muy bien equipada para fomentar la imaginación.",
     "caracteristicas": ["talleres", "sala infantil"],
     "favorito": false
   },
@@ -55,20 +55,20 @@
     "coords": [40.3855706, -3.7334953],
     "direccion": "Carabanchel, 28025 Madrid",
     "imagen": "/img/tartaruga.JPG",
-    "resumen": "Cafetería con juegos de madera y talleres en zona Urgel.",
-    "caracteristicas": ["campamentos", "montessori", "talleres"],
+    "resumen": "Espacio de crianza y talleres en zona Urgel. Un rincón con alma Montessori pensado para el juego tranquilo, la estimulación temprana y deliciosas meriendas familiares.",
+    "caracteristicas": ["campamentos", "montessori", "talleres", "celebraciones"],
     "favorito": true
   },
   {
     "id": 6,
     "nombre": "La Tribu Kids (Chamberí)",
-    "categoria": "cafetería",
+    "categoria": "restaurante",
     "forma": "estrella",
     "coords": [40.4404184, -3.6995518],
     "direccion": "C. de Espronceda, 22, Chamberí, 28003 Madrid",
     "imagen": "/img/laTribu.webp",
-    "resumen": "Espacio de juego libre y crianza respetuosa en Chamberí.",
-    "caracteristicas": ["juego libre", "crianza", "talleres"],
+    "resumen": "Espacio de juego libre y crianza respetuosa en Chamberí. Combina una bonita zona de cafetería para padres con un área de exploración sensoriomotriz perfecta para bebés y niños pequeños.",
+    "caracteristicas": ["cafetería", "juego libre", "crianza", "talleres"],
     "favorito": false
   },
   {
@@ -79,8 +79,8 @@
     "coords": [40.3637152, -3.7400689],
     "direccion": "C. de la Calderilla, 1, Carabanchel, 28054 Madrid",
     "imagen": "/img/islazul_1.JPG",
-    "resumen": "Centro comercial con ludoteca y zonas de juego gratuitas.",
-    "caracteristicas": ["aseo infantil", "ludoteca", "sala de cine infantil"],
+    "resumen": "Centro comercial con ludoteca y zonas de juego gratuitas. También tiene sala de cine infantil con parque incorporado.",
+    "caracteristicas": ["aseo infantil", "parque interior", "sala de cine infantil"],
     "favorito": false
   },
   {
@@ -91,7 +91,7 @@
     "coords": [40.4222699, -3.7166657],
     "direccion": "Plaza de España, 11, Moncloa - Aravaca, 28008 Madrid",
     "imagen": "/img/elParquecito.jpeg",
-    "resumen": "Terraza enorme en la nueva Plaza España, ideal para que corran.",
+    "resumen": "Restaurante con servicio de ludoteca con monitores los fines de semana, perfecto para comer tranquilos.",
     "caracteristicas": ["ludoteca", "monitor"],
     "favorito": false
   },
@@ -115,8 +115,8 @@
     "coords": [40.4123415, -3.7115231],
     "direccion": "C. de la Cava Alta, 12, Centro, 28005 Madrid",
     "imagen": "/img/Storyland.jpg",
-    "resumen": "Cafetería y parque de juegos mágico en pleno centro (La Latina).",
-    "caracteristicas": ["café", "parque interior", "espectáculo infantil"],
+    "resumen": "Cafetería y parque de juegos mágico en pleno centro (La Latina). Un local temático espectacular que organiza espectáculos infantiles y meriendas teatrales para vivir una tarde de cuento.",
+    "caracteristicas": ["cafetería", "parque interior", "espectáculo infantil"],
     "favorito": true
   },
   {
@@ -127,7 +127,7 @@
     "coords": [40.3968982, -3.7172445],
     "direccion": "C. de Fuenlabrada, 4, Carabanchel, 28019 Madrid",
     "imagen": "/img/clanBichos.jpg",
-    "resumen": "Teatro de títeres y talleres creativos en Carabanchel.",
+    "resumen": "Teatro de títeres y talleres creativos en Carabanchel. Un espacio cultural de cercanía con una programación artesanal preciosa que fascina tanto a bebés como a niños en edad escolar.",
     "caracteristicas": ["teatro", "títeres", "artesanal"],
     "favorito": false
   },
@@ -139,7 +139,7 @@
     "coords": [40.391483, -3.7274371],
     "direccion": "C. San Braulio, 3, Carabanchel, 28019 Madrid",
     "imagen": "/img/onlydreams_1.webp",
-    "resumen": "Teatro de títeres y talleres creativos en Carabanchel.",
+    "resumen": "Espacio polivalente para talleres creativos, campamentos urbanos y cumpleaños. Un lugar dinámico en Carabanchel diseñado para estimular la expresión artística y el movimiento en los niños.",
     "caracteristicas": ["talleres", "campamento", "celebraciones"],
     "favorito": false
   }, 
@@ -151,20 +151,20 @@
     "coords": [40.3985912, -3.7147311],
     "direccion": "Autop. de Circunvalación M-30, 28005 Madrid",
     "imagen": "/img/madrid_rio.JPG",
-    "resumen": "Parque al aire libre",
+    "resumen": "Inmenso parque urbano al aire libre con diecisiete áreas de juegos infantiles. El paraíso de los niños gracias a sus famosos toboganes gigantes, tirolinas y los refrescantes chorros de agua en verano.",
     "caracteristicas": ["toboganes", "tirolinas", "juegos de agua"],
     "favorito": false
   },
   {
     "id": 14,
     "nombre": "Little & Latte",
-    "categoria": "cafetería",
+    "categoria": "restaurante",
     "forma": "estrella",
     "coords": [40.4497148, -3.6785267],
     "direccion": "Calle del Príncipe de Vergara, 205, Chamartín, 28002 Madrid",
     "imagen": "/img/little_1.jpeg",
-    "resumen": "Family play Café",
-    "caracteristicas": ["aseo infantil", "zona juegos", "comida kid & baby friendly"],
+    "resumen": "Family play Café con un área de juegos adaptada para la primera infancia. Un espacio relajante donde merendar rico mientras cuidas de tu bebé en un entorno seguro y 'kid-friendly'.",
+    "caracteristicas": ["cafetería", "aseo infantil", "zona juegos", "comida kids & baby friendly"],
     "favorito": false
   }
 ]
