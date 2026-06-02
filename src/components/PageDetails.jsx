@@ -47,10 +47,28 @@ const PageDetails = ({ places, session, setMostrarAuthModal, favoritos, toggleFa
         </div>
       )}
 
-      {/* HEADER IMAGEN */}
-      <div style={{ position: 'relative', height: '280px', width: '100%' }}>
+      {/* HEADER IMAGEN CON BORDE ONDULADO */}
+      <div style={{ position: 'relative', height: '280px', width: '100%', overflow: 'hidden' }}>
         <img src={sitio.imagen} alt={sitio.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         
+        {/* 🎨 ONDA FESTONEADA EN SVG: Integra la imagen con el fondo crema */}
+        <svg 
+          viewBox="0 0 100 12" 
+          preserveAspectRatio="none" 
+          style={{
+            position: 'absolute',
+            bottom: '-1px', // Evita micro-líneas extrañas de renderizado
+            left: 0,
+            width: '100%',
+            height: '24px', // Altura del festón adaptado a la cabecera
+            fill: 'var(--color-bg-cream)', // Corta la imagen integrándose con el fondo del contenido
+            zIndex: 5,
+            pointerEvents: 'none'
+          }}
+        >
+          <path d="M0,12 L100,12 L100,6 C95,6 92,0 87.5,0 C83,0 80,6 75,6 C70,6 67,0 62.5,0 C58,0 55,6 50,6 C45,6 42,0 37.5,0 C33,0 30,6 25,6 C20,6 17,0 12.5,0 C8,0 5,6 0,6 Z" />
+        </svg>
+
         {/* Botón Atrás */}
         <button onClick={() => navigate(-1)} style={{ position: 'absolute', top: '20px', left: '20px', backgroundColor: 'white', border: 'none', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-soft)', cursor: 'pointer', zIndex: 10 }}>
           <span className="material-symbols-rounded">arrow_back</span>
@@ -77,7 +95,7 @@ const PageDetails = ({ places, session, setMostrarAuthModal, favoritos, toggleFa
       </div>
 
       {/* CONTENIDO DE LA FICHA */}
-      <div style={{ marginTop: '-30px', backgroundColor: 'var(--color-bg-cream)', borderRadius: '30px 30px 0 0', padding: '25px', position: 'relative', zIndex: 2 }}>
+      <div style={{ backgroundColor: 'var(--color-bg-cream)', padding: '25px', position: 'relative', zIndex: 2 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <h1 style={{ margin: 0, fontSize: '1.7rem', color: 'var(--color-text)', fontWeight: '900', textAlign: 'left' }}>{sitio.nombre}</h1>
           <span className="material-symbols-rounded" style={{ color: 'var(--color-main-pink)', fontSize: '2rem' }}>
