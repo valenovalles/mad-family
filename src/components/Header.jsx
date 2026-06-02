@@ -45,7 +45,7 @@ const Header = (props) => {
         <img 
           src={logoMF} 
           alt="Mad Family Logo" 
-          onClick={() => navigate('/home')}
+          onClick={() => navigate('/')}
           style={{ height: '42px', cursor: 'pointer' }} 
         />
 

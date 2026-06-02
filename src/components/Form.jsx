@@ -64,7 +64,7 @@ const Form = ({ session }) => {
             Ya nos ha llegado el chivatazo directito al correo. Lo revisaremos volando para añadirlo al mapa oficial. ¡Gracias, family!
           </p>
           <button
-            onClick={() => navigate('/home')}
+            onClick={() => navigate('/')}
             style={{
               width: '100%', height: '45px', backgroundColor: 'var(--color-main-blue)', color: 'white',
               border: 'none', borderRadius: '15px', fontWeight: '900', cursor: 'pointer'

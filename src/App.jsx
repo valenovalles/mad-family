@@ -101,7 +101,7 @@ function App() {
   const filtroCat = params.get('categoria') || 'todos';
 
   const actualizarFiltro = (nuevaCat) => {
-    const path = (location.pathname === '/home' || location.pathname === '/perfil' || location.pathname === '/favoritos') ? '/lista' : location.pathname;
+    const path = (location.pathname === '/' || location.pathname === '/perfil' || location.pathname === '/favoritos') ? '/lista' : location.pathname;
     navigate(`${path}?categoria=${nuevaCat}`);
   };
 
@@ -195,8 +195,7 @@ function App() {
         
       <main className="app-content-wrapper" style={{ flex: 1, position: 'relative' }}>
         <Routes>
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home setFiltroCat={actualizarFiltro} places={places} />} />
+          <Route path="/" element={<Home setFiltroCat={actualizarFiltro} places={places} session={session} />} />
           <Route 
             path="/mapa" 
             element={
