@@ -36,6 +36,7 @@ const Home = ({ setFiltroCat, places }) => {
         {/* ☁️ PROPUESTA DE VALOR / CONCEPTO MAD FAMILY */}
         <p style={{
           margin: '0 0 5px 0',
+          textAlign: "center",
           fontSize: '0.85rem',
           fontWeight: '800',
           color: 'var(--color-text)',
