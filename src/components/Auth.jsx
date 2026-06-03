@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import Modal from './Modal'; // <-- Asegúrate de que la ruta a tu componente Modal sea correcta
+import Modal from './Modal'
 
 const Auth = () => {
   const [email, setEmail] = useState('');

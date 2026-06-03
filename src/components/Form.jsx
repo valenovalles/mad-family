@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Modal from './Modal'; // <-- Asegúrate de mapear la ruta correcta de tu componente Modal
 
 const Form = ({ session }) => {
   const navigate = useNavigate();
@@ -8,6 +9,22 @@ const Form = ({ session }) => {
   const [zona, setZona] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [exito, setExito] = useState(false);
+
+  // 🚨 ESTADO PARA LA CONFIGURACIÓN DE TU MODAL PERSONALIZADA
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: ''
+  });
+
+  // Función ayudante para abrir la modal con el mensaje deseado
+  const mostrarAlerta = (title, message) => {
+    setModalConfig({
+      isOpen: true,
+      title,
+      message
+    });
+  };
 
   // ⚠️ REGÍSTRATE EN FORMSPREE.IO (ES GRATIS), CREA UN FORMULARIO Y PEGA AQUÍ TU ID:
   const FORMSPREE_ID = "xlgvzqoy"; 
@@ -42,11 +59,19 @@ const Form = ({ session }) => {
         setResumen('');
         setZona('');
       } else {
-        alert("Vaya, algo ha fallado al enviar el correo. ¡Inténtalo de nuevo, family! 😅");
+        // Reemplazo del primer alert nativo
+        mostrarAlerta(
+          '¡Vaya, algo ha fallado! 😅', 
+          'No hemos podido enviar el correo con tu sugerencia. Por favor, revísalo e inténtalo de nuevo, family.'
+        );
       }
     } catch (error) {
       console.error("Error enviando el formulario:", error);
-      alert("Error de red. Revisa tu conexión a internet.");
+      // Reemplazo del segundo alert nativo (errores de red o conexión)
+      mostrarAlerta(
+        'Error de red 🌐', 
+        'Parece que hay un problema con tu conexión a internet. Revisa tus datos o tu Wi-Fi y vuelve a intentarlo.'
+      );
     } finally {
       setEnviando(false);
     }
@@ -97,7 +122,7 @@ const Form = ({ session }) => {
           
           <div>
             <label style={{ display: 'block', marginBottom: '6px', fontSize: '0.85rem', fontWeight: '800', color: 'var(--color-text)' }}>
-              ¿Cómo se llama el sitio? *
+              ¿Como se llama el sitio? *
             </label>
             <input
               type="text"
@@ -162,6 +187,17 @@ const Form = ({ session }) => {
           </button>
         </form>
       </div>
+
+      {/* 🎡 TU MODAL DOPAMÍNICA INYECTADA PARA ABORTAR ALERTAS NATIVAS */}
+      <Modal 
+        isOpen={modalConfig.isOpen}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        confirmText="Entendido"
+        onConfirm={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        cancelText="Cerrar"
+      />
     </div>
   );
 };
