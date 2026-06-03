@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
+import Modal from './Modal'; // <-- Asegúrate de que la ruta a tu componente Modal sea correcta
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -10,39 +11,66 @@ const Auth = () => {
   const [vista, setVista] = useState('login'); 
   const [mensajeExito, setMensajeExito] = useState('');
 
-  // Lógica de Login y Registro que ya tienes...
+  // 🚨 ESTADOS PARA CONTROLAR TU MODAL DOPAMÍNICA
+  const [modalConfig, setModalConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Entendido'
+  });
+
+  // Función rápida para abrir la modal configurando su contenido
+  const mostrarAlerta = (title, message, confirmText = 'Entendido') => {
+    setModalConfig({
+      isOpen: true,
+      title,
+      message,
+      confirmText
+    });
+  };
+
+  // Lógica de Login
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) alert(error.message);
+    if (error) {
+      mostrarAlerta('¡Ups! Algo ha fallado 🔍', error.message);
+    }
     setLoading(false);
   };
 
+  // Lógica de Registro
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     const { error } = await supabase.auth.signUp({ email, password });
-    if (error) alert(error.message);
-    else alert('¡Revisa tu correo para confirmar la cuenta! 📬');
+    if (error) {
+      mostrarAlerta('No se pudo crear la cuenta 📋', error.message);
+    } else {
+      mostrarAlerta(
+        '¡Revisa tu correo! 📬', 
+        'Te hemos enviado un enlace mágico a tu email para confirmar la cuenta familiar y empezar la aventura.'
+      );
+    }
     setLoading(false);
   };
 
-  // 📨 NUEVA LÓGICA: ENVIAR EMAIL DE RECUPERACIÓN
+  // 📨 ENVIAR EMAIL DE RECUPERACIÓN
   const handleRecuperarPassword = async (e) => {
     e.preventDefault();
-    if (!email) return alert('Por favor, introduce tu email familiar.');
-    setLoading(false);
+    if (!email) {
+      return mostrarAlerta('Falta el email ✉️', 'Por favor, introduce tu email familiar para continuar.');
+    }
     setLoading(true);
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      // La URL a la que volverá el usuario cuando pulse el link de su correo
       redirectTo: `${window.location.origin}/perfil`, 
     });
 
     setLoading(false);
     if (error) {
-      alert(`Error: ${error.message}`);
+      mostrarAlerta('Error de recuperación ❌', error.message);
     } else {
       setMensajeExito('¡Chivatazo enviado! Revisa tu email para restablecer tu contraseña. 📬✨');
       setTimeout(() => {
@@ -89,11 +117,22 @@ const Auth = () => {
         >
           Volver a iniciar sesión
         </button>
+
+        {/* Renderizado de la Modal */}
+        <Modal 
+          isOpen={modalConfig.isOpen}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          confirmText={modalConfig.confirmText}
+          onConfirm={() => setModalConfig({ ...modalConfig, isOpen: false })}
+          onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
+          cancelText="Cerrar"
+        />
       </div>
     );
   }
 
-  // --- VISTA 2: LOGIN TRADICIONAL (Añadimos el gancho de olvido) ---
+  // --- VISTA 2: LOGIN Y REGISTRO TRADICIONAL ---
   return (
     <div style={{ textAlign: 'left', fontFamily: 'inherit' }}>
       <form onSubmit={vista === 'login' ? handleLogin : handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -120,7 +159,7 @@ const Auth = () => {
           style={{ width: '100%', padding: '12px', borderRadius: '12px', border: '2px solid #eee', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
         />
 
-        {/* 🔗 ENLACE DE OLVIDÓ CONTRASEÑA (Solo visible en modo login) */}
+        {/* 🔗 ENLACE DE OLVIDÓ CONTRASEÑA */}
         {vista === 'login' && (
           <div style={{ textAlign: 'right', marginTop: '-5px' }}>
             <span 
@@ -146,6 +185,17 @@ const Auth = () => {
           {vista === 'login' ? '¿No tienes cuenta? Regístrate gratis' : '¿Ya tienes cuenta? Inicia sesión'}
         </button>
       </div>
+
+      {/* 🎡 LA MODAL INTEGRADA AL FINAL DE LA VISTA PRINCIPAL */}
+      <Modal 
+        isOpen={modalConfig.isOpen}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        confirmText={modalConfig.confirmText}
+        onConfirm={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
+        cancelText="Cerrar"
+      />
     </div>
   );
 };
