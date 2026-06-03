@@ -14,6 +14,7 @@ const Header = (props) => {
   const [mostrarCategorias, setMostrarCategorias] = useState(false);
   const esPerfil = location.pathname === '/perfil';
   const esFavoritos = location.pathname === '/favoritos';
+  const esChivarPlan = location.pathname === '/chivar-plan';
   const vistaActual = location.pathname.replace('/', '');
 
   // Extraemos el email si viene en las props o si modificamos la llamada en App.jsx
@@ -60,6 +61,32 @@ const Header = (props) => {
           {/* CASO 1: MAPA o LISTA (Buscador central + Botón Colapsable de Filtros) */}
           {(location.pathname === '/lista' || location.pathname === '/mapa') ? (
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              {/* 🖥️ BOTÓN COLABORATIVO EN ESCRITORIO (Dentro de mapa/lista) */}
+              <button
+                className="desktop-only-icon button-chivar-desktop"
+                onClick={() => navigate('/chivar-plan')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 14px',
+                  backgroundColor: esChivarPlan ? 'var(--color-main-blue)' : 'rgba(255, 255, 255, 0.2)',
+                  color: 'white',
+                  border: '2px dashed white',
+                  borderRadius: '20px',
+                  fontWeight: '800',
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  marginRight: '5px',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <span className="material-symbols-rounded" style={{ fontSize: '1.2rem', fontVariationSettings: "'FILL' 1" }}>
+                  add_comment
+                </span>
+                Chivar plan
+              </button>
+
               <div style={{ maxWidth: '180px' }}>
                 <SearchBar setBusqueda={props.setBusqueda} />
               </div>
@@ -88,12 +115,12 @@ const Header = (props) => {
               </button>
             </div>
           ) : (
-            /* CASO 2: HOME, PERFIL, FAVORITOS o PAGEDETAILS */
+            /* CASO 2: HOME, PERFIL, FAVORITOS, CHIVAR-PLAN o PAGEDETAILS */
             <>
               {/* Títulos limpios de sección */}
-              {(esPerfil || esFavoritos) && (
+              {(esPerfil || esFavoritos || esChivarPlan) && (
                 <h2 style={{ color: 'white', margin: 0, fontSize: '1.1rem', fontWeight: '900' }}>
-                  {esPerfil ? 'Mi Perfil' : 'Mis Favoritos'}
+                  {esPerfil ? 'Mi Perfil' : esFavoritos ? 'Mis Favoritos' : 'Chívanos un plan'}
                 </h2>
               )}
 
@@ -103,7 +130,7 @@ const Header = (props) => {
                 </h2>
               )}
 
-              {/* ✉️ TEXTO EXCLUSIVO MÓVIL: "Family: email" (Se controla con CSS abajo) */}
+              {/* ✉️ TEXTO EXCLUSIVO MÓVIL: "Family: email" */}
               {userEmail && (
                 <span className="mobile-family-text" style={{
                   color: 'white',
@@ -115,7 +142,32 @@ const Header = (props) => {
                 </span>
               )}
 
-              {/* 🖥️ ICONOS EXCLUSIVOS DE ESCRITORIO (Se ocultan en móvil mediante CSS) */}
+              {/* 🖥️ BOTÓN COLABORATIVO EN ESCRITORIO (Fuera de mapa/lista) */}
+              <button
+                className="desktop-only-icon button-chivar-desktop"
+                onClick={() => navigate('/sugerir-plan')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 14px',
+                  backgroundColor: esChivarPlan ? 'var(--color-main-blue)' : 'rgba(255, 255, 255, 0.2)',
+                  color: 'white',
+                  border: '2px dashed white',
+                  borderRadius: '20px',
+                  fontWeight: '800',
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <span className="material-symbols-rounded" style={{ fontSize: '1.2rem', fontVariationSettings: "'FILL' 1" }}>
+                  add_comment
+                </span>
+                Chivar plan
+              </button>
+
+              {/* 🖥️ ICONOS EXCLUSIVOS DE ESCRITORIO */}
               <span 
                 className="material-symbols-rounded desktop-only-icon" 
                 onClick={() => navigate('/favoritos')}
@@ -187,6 +239,10 @@ const Header = (props) => {
         /* 🖥️ COMPORTAMIENTO EN ESCRITORIO (A partir de 768px) */
         @media (min-width: 768px) {
           .desktop-only-icon {
+            display: flex !important;
+          }
+          /* Forzamos a que el botón que es un <button> use flex en escritorio en vez de inline-block */
+          .button-chivar-desktop {
             display: flex !important;
           }
           .mobile-family-text {

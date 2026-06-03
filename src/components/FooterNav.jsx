@@ -24,7 +24,7 @@ const FooterNav = () => {
       paddingBottom: 'env(safe-area-inset-bottom)' 
     }}>
       
-      {/* Botón Explorar (Mapa) */}
+      {/* 1. Botón Explorar (Mapa) */}
       <button 
         onClick={() => navigate('/mapa')}
         style={navButtonStyle(isActive('/mapa') || isActive('/lista'))}
@@ -37,7 +37,20 @@ const FooterNav = () => {
         <span style={{ fontSize: '0.6rem', fontWeight: '800' }}>Explorar</span>
       </button>
 
-      {/* Botón Favoritos */}
+      {/* 🚀 2. NUEVO BOTÓN: Chivar Plan (Colaborativo) */}
+      <button 
+        onClick={() => navigate('/sugerir-plan')} // Asegúrate de que esta sea la ruta de tu componente Form
+        style={navButtonStyle(isActive('/sugerir-plan'))}
+      >
+        <span className="material-symbols-rounded" style={{
+          fontVariationSettings: isActive('/sugerir-plan') ? "'FILL' 1" : "'FILL' 0"
+        }}>
+          add_comment
+        </span>
+        <span style={{ fontSize: '0.6rem', fontWeight: '800' }}>Chivar Plan</span>
+      </button>
+
+      {/* 3. Botón Favoritos */}
       <button 
         onClick={() => navigate('/favoritos')}
         style={navButtonStyle(isActive('/favoritos'))}
@@ -50,7 +63,7 @@ const FooterNav = () => {
         <span style={{ fontSize: '0.6rem', fontWeight: '800' }}>Favoritos</span>
       </button>
 
-      {/* Botón Perfil */}
+      {/* 4. Botón Perfil */}
       <button 
         onClick={() => navigate('/perfil')}
         style={navButtonStyle(isActive('/perfil'))}
@@ -67,7 +80,7 @@ const FooterNav = () => {
   );
 };
 
-// Estilo dinámico para los botones de la Nav
+// Estilo dinámico para los botones de la Nav (Se mantiene intacto tu código original)
 const navButtonStyle = (active) => ({
   background: 'none',
   border: 'none',

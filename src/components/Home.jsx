@@ -46,7 +46,7 @@ const Home = ({ setFiltroCat, places }) => {
           borderRadius: 'var(--radius-pill)',
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
         }}>
-          La guía definitiva para familias en Madrid
+          La guía colaborativa de Madrid, hecha por y para familias exploradoras 🎡✨
         </p>
 
         <h2 style={{ 
