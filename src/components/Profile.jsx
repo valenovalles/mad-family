@@ -1,28 +1,19 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { useNavigate } from 'react-router-dom'; // <-- IMPORTANTE: Traemos el hook para movernos de pantalla
+import { useNavigate } from 'react-router-dom'; 
 import Modal from './Modal'; 
 
 const Perfil = ({ numFavoritos, email }) => {
-  const navigate = useNavigate(); // <-- Inicializamos el router
+  const navigate = useNavigate(); 
 
   // Estados para controlar el modal de Cerrar Sesión
   const [modalLogoutOpen, setModalLogoutOpen] = useState(false);
-  
-  // Estados para controlar el modal de Borrar Datos
-  const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
   
   const inicialAvatar = email ? email.charAt(0).toUpperCase() : 'F';
 
   const confirmarLogout = async () => {
     setModalLogoutOpen(false);
     await supabase.auth.signOut();
-  };
-
-  const confirmarClearData = () => {
-    setModalDeleteOpen(false);
-    localStorage.removeItem('mad-favoritos');
-    window.location.reload(); 
   };
 
   return (
@@ -57,16 +48,16 @@ const Perfil = ({ numFavoritos, email }) => {
         padding: '20px',
         boxShadow: 'var(--shadow-soft)',
         textAlign: 'center',
-        border: '2px dashed #f9e6ee' // Un toque visual divertido de invitación
+        border: '2px dashed #f9e6ee' 
       }}>
         <p style={{ margin: '0 0 12px 0', fontSize: '0.9rem', color: '#666', fontWeight: '700', lineHeight: '1.4' }}>
           ¿Has descubierto un sitio ideal con los peques que no está en nuestra guía? 🎡✨
         </p>
         <button
-          onClick={() => navigate('/sugerir-plan')} // Redirige a tu formulario de Formspree
+          onClick={() => navigate('/chivar-plan')} // Actualizado a la ruta unificada que acordamos
           style={{
             width: '100%',
-            backgroundColor: 'var(--color-main-pink)', // Tu rosa potente del buscador
+            backgroundColor: 'var(--color-main-pink)', 
             color: 'white',
             border: 'none',
             padding: '12px',
@@ -117,28 +108,15 @@ const Perfil = ({ numFavoritos, email }) => {
             width: '100%', backgroundColor: 'var(--color-bg-cream)', color: 'var(--color-text)',
             border: '2px solid var(--color-main-blue)', padding: '12px', borderRadius: '16px',
             fontWeight: '800', cursor: 'pointer', fontSize: '0.95rem',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '20px'
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
           }}
         >
           <span className="material-symbols-rounded" style={{fontSize: '1.2rem'}}>logout</span>
           Cerrar sesión de la cuenta
         </button>
-
-        <div style={{ textAlign: 'center' }}>
-          <button 
-            onClick={() => setModalDeleteOpen(true)} 
-            style={{ 
-              background: 'none', border: 'none', padding: 0,
-              color: '#ff4d4d', fontWeight: '800', cursor: 'pointer',
-              fontSize: '0.85rem', textDecoration: 'underline'
-            }}
-          >
-            Borrar caché de favoritos local
-          </button>
-        </div>
       </div>
 
-      {/* --- MODALES PERSONALIZADOS --- */}
+      {/* --- MODAL DE LOGOUT --- */}
       <Modal 
         isOpen={modalLogoutOpen}
         onClose={() => setModalLogoutOpen(false)}
@@ -147,16 +125,6 @@ const Perfil = ({ numFavoritos, email }) => {
         message="¿Seguro que quieres cerrar sesión en tu cuenta de Mad Family?"
         confirmText="Sí, salir"
         cancelText="Quedarme"
-      />
-
-      <Modal 
-        isOpen={modalDeleteOpen}
-        onClose={() => setModalDeleteOpen(false)}
-        onConfirm={confirmarClearData}
-        title="¡Cuidado! ⚠️"
-        message="¿Seguro que quieres borrar todos tus favoritos locales? Esta acción no se puede deshacer."
-        confirmText="Sí, borrar todo"
-        cancelText="Cancelar"
       />
 
       {/* Versión de la App */}
