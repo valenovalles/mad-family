@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+// 1️⃣ Importamos Helmet para inyectar los metadatos en el <head>
+import { Helmet } from 'react-helmet-async'; 
 import MapaMadrid from './MapaMadrid'; 
 import CategoryGrid from './GridCategory'; 
 import logoMF from '../assets/logo_def.png'; 
@@ -15,6 +17,13 @@ const Home = ({ setFiltroCat, places }) => {
       minHeight: '100vh', 
       paddingBottom: '100px'
     }}>
+      
+      {/* 🔮 ETIQUETAS MAGICAS PARA GOOGLE */}
+      <Helmet>
+        <title>Mad Family 🎡 Guía colaborativa de Madrid con niños</title>
+        <meta name="description" content="La guía de Madrid hecha por y para familias exploradoras. Descubre los mejores planes con niños, cafeterías child-friendly y comparte tus rincones favoritos." />
+        <link rel="canonical" href="https://madfamily.es" />
+      </Helmet>
       
       {/* CABECERA */}
       <div style={{ 
@@ -33,8 +42,8 @@ const Home = ({ setFiltroCat, places }) => {
           }} 
         />
         
-        {/* ☁️ PROPUESTA DE VALOR / CONCEPTO MAD FAMILY */}
-        <p style={{
+        {/* ☁️ NUESTRO H1 OPTIMIZADO PARA GOOGLE (Mantiene tu diseño intacto) */}
+        <h1 style={{
           margin: '0 0 5px 0',
           textAlign: "center",
           fontSize: '0.85rem',
@@ -45,9 +54,10 @@ const Home = ({ setFiltroCat, places }) => {
           padding: '4px 12px',
           borderRadius: 'var(--radius-pill)',
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+          lineHeight: '1.4'
         }}>
           La guía colaborativa de Madrid, hecha por y para familias exploradoras 🎡✨
-        </p>
+        </h1>
 
         <h2 style={{ 
           color: 'var(--color-main-pink)', 
@@ -73,7 +83,6 @@ const Home = ({ setFiltroCat, places }) => {
           position: 'relative'
         }}
       >
-        {/* 🔥 CLAVE: Le pasamos la función onMarkerClick para que intercepte el clic del icono */}
         <MapaMadrid 
           places={places} 
           onMarkerClick={(id) => navigate(`/mapa?seleccionar=${id}`)} 

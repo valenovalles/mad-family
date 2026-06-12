@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ResenasSection from './ResenasSection'; // 🔥 Importamos el módulo de reseñas recién creado
+// 1️⃣ Importamos Helmet para activar el SEO dinámico en las fichas
+import { Helmet } from 'react-helmet-async'; 
+import ResenasSection from './ResenasSection'; 
 
 const PageDetails = ({ places, session, setMostrarAuthModal, favoritos, toggleFavorito }) => {
   const { id } = useParams();
@@ -41,6 +43,19 @@ const PageDetails = ({ places, session, setMostrarAuthModal, favoritos, toggleFa
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg-cream)', paddingBottom: '100px', position: 'relative' }}>
       
+      {/* 🔮 2️⃣ EL SUPERPODER DEL SEO DINÁMICO PARA CADA PLANAZO */}
+      <Helmet>
+        {/* Cambia el título automáticamente. Ej: "Cafetería El Columpio Azul | Madrid con niños | Mad Family 🎡" */}
+        <title>{`${sitio.nombre} | Madrid con niños | Mad Family 🎡`}</title>
+        {/* Genera una meta-descripción usando los datos del sitio */}
+        <meta 
+          name="description" 
+          content={`Descubre por qué la family recomienda ${sitio.nombre}${sitio.direccion ? ` en ${sitio.direccion}` : ' en Madrid'}. ¡El mejor planazo con peques!`} 
+        />
+        {/* Enlace canónico dinámico para Google */}
+        <link rel="canonical" href={`https://madfamily.es/lugar/${id}`} />
+      </Helmet>
+
       {copiado && (
         <div style={{ position: 'fixed', top: '20px', left: '20px', right: '20px', backgroundColor: 'var(--color-text)', color: 'white', padding: '12px', borderRadius: '14px', fontSize: '0.8rem', fontWeight: '800', textAlign: 'center', zIndex: '1000', boxShadow: '0 8px 25px rgba(0,0,0,0.2)', animation: 'fadeInOutDetails 2.5s ease-in-out' }}>
           ¡Enlace del planazo copiado para WhatsApp! 🚀
@@ -57,11 +72,11 @@ const PageDetails = ({ places, session, setMostrarAuthModal, favoritos, toggleFa
           preserveAspectRatio="none" 
           style={{
             position: 'absolute',
-            bottom: '-1px', // Evita micro-líneas extrañas de renderizado
+            bottom: '-1px', 
             left: 0,
             width: '100%',
-            height: '24px', // Altura del festón adaptado a la cabecera
-            fill: 'var(--color-bg-cream)', // Corta la imagen integrándose con el fondo del contenido
+            height: '24px', 
+            fill: 'var(--color-bg-cream)', 
             zIndex: 5,
             pointerEvents: 'none'
           }}
@@ -97,6 +112,7 @@ const PageDetails = ({ places, session, setMostrarAuthModal, favoritos, toggleFa
       {/* CONTENIDO DE LA FICHA */}
       <div style={{ backgroundColor: 'var(--color-bg-cream)', padding: '25px', position: 'relative', zIndex: 2 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          {/* 🔥 TU H1 PERFECTO: Google indexará el nombre exacto del local */}
           <h1 style={{ margin: 0, fontSize: '1.7rem', color: 'var(--color-text)', fontWeight: '900', textAlign: 'left' }}>{sitio.nombre}</h1>
           <span className="material-symbols-rounded" style={{ color: 'var(--color-main-pink)', fontSize: '2rem' }}>
             {sitio.categoria === 'restaurante' ? 'restaurant' : 'celebration'}
