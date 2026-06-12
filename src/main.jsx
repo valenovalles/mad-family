@@ -1,15 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
-import './index.css';
-// 1️⃣ Importamos el proveedor
-import { HelmetProvider } from 'react-helmet-async';
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { HelmetProvider } from 'react-helmet-async' // Mantenemos el SEO aquí
+import './index.css'
+import App from './App.jsx'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    {/* 2️⃣ Envolvemos la App con él */}
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
     <HelmetProvider>
       <App />
     </HelmetProvider>
-  </React.StrictMode>,
-);
+  </StrictMode>,
+)
